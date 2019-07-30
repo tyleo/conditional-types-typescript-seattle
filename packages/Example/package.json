@@ -1,0 +1,19 @@
+{
+  "name": "Example",
+  "description": "Example",
+  "version": "1.0.0",
+  "author": "Tyler Wolf Leonhardt",
+  "private": true,
+  "main": "./target/ts/index.js",
+  "types": "./target/ts/index.d.ts",
+  "devDependencies": {
+    "Base_": "1.0.0"
+  },
+  "scripts": {
+    "build": "ttsc -b",
+    "clean": "yarn clean:node_modules & yarn clean:target",
+    "clean:node_modules": "rimraf node_modules",
+    "clean:target": "rimraf target",
+    "watch": "ttsc -b --w"
+  }
+}

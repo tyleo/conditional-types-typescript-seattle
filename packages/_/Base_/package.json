@@ -1,0 +1,20 @@
+{
+  "name": "Base_",
+  "description": "Base_",
+  "version": "1.0.0",
+  "author": "Tyler Wolf Leonhardt",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "jest": "^24.8.0",
+    "rimraf": "^2.6.3",
+    "ts-transform-paths": "^2.0.0",
+    "ttypescript": "^1.5.6",
+    "typescript": "^3.4.3"
+  },
+  "scripts": {
+    "clean": "yarn clean:node_modules & yarn clean:target",
+    "clean:node_modules": "rimraf node_modules",
+    "clean:target": "rimraf target"
+  }
+}
