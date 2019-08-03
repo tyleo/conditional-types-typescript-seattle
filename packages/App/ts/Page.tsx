@@ -5,5 +5,5 @@ import * as React from "react";
 // HTML
 
 export const Page = () => {
-  return <div>{"Hello World"}</div>;
+  return <canvas style={{ fill: "black" }} />;
 };
