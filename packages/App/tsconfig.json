@@ -3,12 +3,13 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "App": ["./ts"]
+      "App": ["./ts"],
+      "Asset/*": ["../../asset/*"]
     },
     "rootDir": "./ts",
-    "declarationDir": "./target/ts",
-    "outDir": "./target/ts",
-    "tsBuildInfoFile": "./target/ts/tsconfig.tsbuildinfo"
+    "declarationDir": "./target/ts/dts",
+    "outDir": "./target/ts/commonjs",
+    "tsBuildInfoFile": "./target/ts/commonjs/tsconfig.tsbuildinfo"
   },
   "include": ["./ts/**/*.ts", "./ts/**/*.tsx"]
 }

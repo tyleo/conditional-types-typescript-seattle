@@ -3,10 +3,16 @@ import * as Path from "path";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as Webpack from "webpack";
 
+// From target/ts/commonjs/_Build
+const basePath = Path.resolve(__dirname, "../../../..");
+const baseRelative = (path: string) => Path.resolve(basePath, path);
+const srcPath = Path.resolve(basePath, "target/ts/commonjs");
+const srcRelative = (path: string) => Path.resolve(srcPath, path);
+
 const config: Webpack.Configuration = {
   devtool: "source-map",
   entry: {
-    index: Path.resolve(__dirname, "../renderer.js"),
+    index: srcRelative("renderer.js"),
   },
   mode: "development",
   module: {
@@ -16,15 +22,28 @@ const config: Webpack.Configuration = {
         loader: "source-map-loader",
         enforce: "pre",
       },
+      {
+        test: /\.(png|obj|mtl)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "asset/obj",
+              include: [baseRelative("asset")],
+            },
+          },
+        ],
+      },
     ],
   },
   output: {
     filename: "[name].js",
-    path: Path.resolve(__dirname, "../../webpack/dev"),
+    path: baseRelative("target/webpack/dev"),
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: Path.resolve(__dirname, "../../../html/index.html"),
+      template: baseRelative("asset/html/index.html"),
       inlineSource: ".js",
     }),
   ],

@@ -1,6 +1,8 @@
 import * as React from "react";
 
 import * as Three from "three";
+import * as MtlLoader from "three/examples/jsm/loaders/MTLLoader";
+import * as ObjLoader from "three/examples/jsm/loaders/OBJLoader";
 
 // CSS
 
@@ -17,15 +19,29 @@ const perspectiveRenderer = () => {
 
   const scene = new Three.Scene();
 
-  const geometry = new Three.BoxGeometry(0.2, 0.2, 0.2);
-  const material = new Three.MeshNormalMaterial();
-
-  const mesh = new Three.Mesh(geometry, material);
-  scene.add(mesh);
-
   const renderer = new Three.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.render(scene, camera);
+
+  const mtlLoader = new MtlLoader.MTLLoader();
+  mtlLoader.setPath("asset/obj/");
+  mtlLoader.load("chr_fox.mtl", material => {
+    material.preload();
+    const loader = new ObjLoader.OBJLoader();
+    loader.setMaterials(material);
+    loader.setPath("asset/obj/");
+    loader.load("chr_fox.obj", group => {
+      group.position.set(-1, -2, -1);
+      scene.add(group);
+
+      const light = new Three.PointLight(0xffffff, 1, 100);
+      light.position.set(0, 0, 0);
+      scene.add(light);
+
+      renderer.render(scene, camera);
+    });
+  });
+
   return renderer.domElement;
 };
 

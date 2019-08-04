@@ -4,14 +4,14 @@
   "version": "1.0.0",
   "author": "Tyler Wolf Leonhardt",
   "private": true,
-  "main": "./target/ts/index.js",
-  "types": "./target/ts/index.d.ts",
+  "main": "./target/ts/commonjs/index.js",
+  "types": "./target/ts/dts/index.d.ts",
   "devDependencies": {
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
-    "@types/three": "^0.103.2",
     "Base_": "1.0.0",
-    "Webpack_": "1.0.0"
+    "Webpack_": "1.0.0",
+    "live-server": "^1.2.1"
   },
   "dependencies": {
     "react": "^16.8.6",
@@ -20,10 +20,11 @@
   },
   "scripts": {
     "build": "ttsc -b",
-    "build:dev": "yarn build && webpack --config target/ts/_Build/Dev.js",
+    "build:dev": "yarn build && webpack --config target/ts/commonjs/_Build/Dev.js",
     "clean": "yarn clean:node_modules & yarn clean:target",
     "clean:node_modules": "rimraf node_modules",
     "clean:target": "rimraf target",
+    "serve:dev": "live-server target/webpack/dev",
     "start": "node ./target/ts/index.js",
     "watch": "ttsc -b --w"
   }
