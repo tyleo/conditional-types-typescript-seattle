@@ -8,14 +8,14 @@
       "name": "Website: Compile & Launch",
       "type": "chrome",
       "request": "launch",
-      "file": "${workspaceFolder}/packages/App/target/webpack/dev/index.html",
+      "url": "http://127.0.0.1:5500",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
         "webpack:///./ts/*": "${workspaceFolder}/packages/App/ts/*",
         "webpack:///../*": "${workspaceFolder}/packages/*"
       },
-      "preLaunchTask": "npm: build:dev - packages/App",
-      "trace": "verbose"
+      "preLaunchTask": "npm: build:dev - packages/App"
+      //"trace": "verbose"
     }
   ]
 }

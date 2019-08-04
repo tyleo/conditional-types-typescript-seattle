@@ -30,7 +30,7 @@ const config: Webpack.Configuration = {
             options: {
               name: "[name].[ext]",
               outputPath: "asset/obj",
-              include: [baseRelative("asset")],
+              include: [baseRelative("asset/obj")],
             },
           },
         ],
