@@ -1,3 +1,5 @@
-import "Asset/obj/chr_fox.mtl";
-import "Asset/obj/chr_fox.obj";
-import "Asset/obj/chr_fox.png";
+import "Asset/obj/ship_00.mtl";
+import "Asset/obj/ship_00.obj";
+import "Asset/obj/ship_00.png";
+
+import "@fortawesome/fontawesome-free/css/all.css";
