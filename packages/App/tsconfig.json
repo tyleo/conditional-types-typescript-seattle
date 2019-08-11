@@ -4,12 +4,11 @@
     "baseUrl": ".",
     "paths": {
       "App": ["./ts"],
-      "Asset/*": ["../../asset/*"]
+      "Asset/*": ["../asset/*"]
     },
     "rootDir": "./ts",
-    "declarationDir": "./target/ts/dts",
-    "outDir": "./target/ts/commonjs",
-    "tsBuildInfoFile": "./target/ts/commonjs/tsconfig.tsbuildinfo"
+    "outDir": "./target/ts",
+    "tsBuildInfoFile": "./target/ts/tsconfig.tsbuildinfo"
   },
   "include": ["./ts/**/*.ts", "./ts/**/*.tsx"]
 }

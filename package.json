@@ -4,14 +4,15 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
-    "eslint": "^6.0.1",
+    "eslint": "^5.0.0",
     "eslint-config-prettier": "^6.0.0",
-    "jest": "^24.8.0",
-    "lerna": "^3.15.0",
+    "lerna": "^3.13.2",
     "prettier": "^1.18.2",
     "rimraf": "^2.6.3",
-    "ttypescript": "^1.5.7",
-    "typescript": "^3.5.2"
+    "ts-transform-paths": "^2.0.0",
+    "ts-node": "^8.0.2",
+    "ttypescript": "^1.5.6",
+    "typescript": "^3.4.3"
   },
   "workspaces": {
     "packages": [
@@ -20,9 +21,13 @@
     ]
   },
   "scripts": {
-    "build": "ttsc -b",
     "clean": "yarn lerna run --parallel clean & yarn clean:root",
-    "clean:node_modules": "lerna run --parallel clean:node_modules",
-    "clean:root": "rimraf node_modules"
+    "clean:node_modules": "lerna run --parallel clean:node_modules & yarn clean:root",
+    "clean:root": "rimraf node_modules",
+    "clean:target": "lerna run --parallel clean:target",
+    "format:prettier": "lerna exec --no-bail --parallel prettier -- --write \"ts/**/*.{ts,tsx}\"",
+    "format:eslint": "lerna exec --no-bail eslint -- ./ts/**/*.{ts,tsx} --fix",
+    "lint": "lerna run --parallel lint",
+    "ttsc:all": "yarn ttsc -b"
   }
 }

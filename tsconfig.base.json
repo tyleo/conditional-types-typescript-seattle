@@ -5,14 +5,14 @@
     "composite": true,
     "incremental": true,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es5",
+    "target": "es2015",
     "plugins": [
       {
         "transform": "ts-transform-paths"

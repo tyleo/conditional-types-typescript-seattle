@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "baseUrl": ".",
+    "paths": {
+      "AppBuild": ["./build"]
+    },
+    "rootDir": "./build",
+    "outDir": "./target/build",
+    "tsBuildInfoFile": "./target/build/tsconfig.tsbuildinfo"
+  },
+  "include": ["./build/**/*.ts", "./build/**/*.tsx"]
+}

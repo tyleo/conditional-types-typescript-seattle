@@ -12,7 +12,7 @@
     "@types/react-dom": "^16.8.4",
     "Base_": "1.0.0",
     "Webpack_": "1.0.0",
-    "live-server": "^1.2.1"
+    "http-server": "^0.11.1"
   },
   "dependencies": {
     "emotion": "^10.0.14",
@@ -21,13 +21,13 @@
     "three": "^0.107.0"
   },
   "scripts": {
-    "build": "ttsc -b",
-    "build:dev": "yarn build && webpack --config target/ts/commonjs/_Build/Dev.js",
+    "build": "ttsc -b && ttsc -b ./tsconfig.build.json",
+    "build:dev": "yarn build && webpack --config target/build/webpack.dev.js",
     "clean": "yarn clean:node_modules & yarn clean:target",
     "clean:node_modules": "rimraf node_modules",
     "clean:target": "rimraf target",
-    "serve:dev": "live-server target/webpack/dev",
-    "start": "node ./target/ts/index.js",
+    "lint": "eslint ts/**",
+    "serve:static:dev": "http-server target/webpack/dev",
     "watch": "ttsc -b --w"
   }
 }

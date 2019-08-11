@@ -10,22 +10,14 @@ import * as App from "App";
 // HTML
 
 const makeScene = () => {
-  //const camera = App.CreatePerspectiveCamera();
-  const camera = App.CreateOrthographicCamera();
-  camera.position.z = 6;
-
   const scene = new Three.Scene();
 
   const light = new Three.PointLight(0xffffff, 3, 100);
   light.position.set(0, 0, 2.5);
   scene.add(light);
 
-  const renderer = new Three.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
   const root = new Three.Group();
   scene.add(root);
-  renderer.render(scene, camera);
   //root.add(App.CreateGrid(10, 10, 10));
 
   App.LoadObj("ship_00").then(loaded => {
@@ -35,37 +27,31 @@ const makeScene = () => {
     loaded.position.set(0 - size.x / 2, -2 - size.y / 2, size.z / 2);
 
     root.add(loaded);
-
-    renderer.render(scene, camera);
   });
 
   const rotationAmount = (3.14 * 2) / 3 / 60;
   const rotateUp = () => {
     //root.rotateX(-rotationAmount);
     root.rotateOnWorldAxis(new Three.Vector3(1, 0, 0), -rotationAmount);
-    renderer.render(scene, camera);
   };
 
   const rotateDown = () => {
     //root.rotateX(+rotationAmount);
     root.rotateOnWorldAxis(new Three.Vector3(1, 0, 0), rotationAmount);
-    renderer.render(scene, camera);
   };
 
   const rotateLeft = () => {
     //root.rotateY(-rotationAmount);
     root.rotateOnWorldAxis(new Three.Vector3(0, 1, 0), -rotationAmount);
-    renderer.render(scene, camera);
   };
 
   const rotateRight = () => {
     //root.rotateY(rotationAmount);
     root.rotateOnWorldAxis(new Three.Vector3(0, 1, 0), rotationAmount);
-    renderer.render(scene, camera);
   };
 
   return {
-    element: renderer.domElement,
+    scene,
     rotateUp,
     rotateDown,
     rotateLeft,
@@ -74,15 +60,32 @@ const makeScene = () => {
 };
 
 const emo = {
-  arrow: () => Emotion.css`{
-    align-self: center;
-    color: white;
-    font-size: 50px;
-    justify-self: center;
+  arrow: () => Emotion.css`
+    ${emo.icon()};
 
     &:hover {
       text-shadow: 0 0 20px white;
     }
+  `,
+
+  button: (isSelected: boolean) => Emotion.css`
+    background-color: ${isSelected ? "rgb(153, 92, 0)" : "rgb(50, 50, 50)"};
+    border: none;
+    border-radius: 7px;
+    color: white;
+    outline: none;
+    padding: 8px;
+
+    &:hover {
+      background-color: ${isSelected ? "rgb(204, 122, 0)" : "rgb(77, 77, 77)"};
+    }
+  `,
+
+  icon: () => Emotion.css`
+    align-self: center;
+    color: white;
+    font-size: 50px;
+    justify-self: center;
   `,
 } as const;
 
@@ -109,14 +112,81 @@ const useRotationFunction = (rotateFn: () => void) => {
   }, [rotateFn, isRotating]);
   return [mouseDown, mouseUp];
 };
+
+const useRender = (
+  renderer: Three.Renderer,
+  scene: Three.Scene,
+  camera: Three.Camera,
+  onRender?: () => void,
+) => {
+  const render = React.useCallback(() => renderer.render(scene, camera), [
+    renderer,
+    scene,
+    camera,
+  ]);
+  React.useEffect(() => {
+    let isActive = true;
+    const callback = () => {
+      if (!isActive) return;
+      if (onRender) onRender();
+      render();
+      requestAnimationFrame(callback);
+    };
+    callback();
+    return () => {
+      isActive = false;
+    };
+  }, [render, onRender]);
+};
+
 export const Page = () => {
+  const renderer = React.useMemo(() => {
+    const renderer = new Three.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    return renderer;
+  }, []);
+
+  const [isPerspectiveCamera, setIsPerspectiveCamera] = React.useState(false);
+  const setPerspective = React.useCallback(
+    () => setIsPerspectiveCamera(true),
+    [],
+  );
+  const setOrthographic = React.useCallback(
+    () => setIsPerspectiveCamera(false),
+    [],
+  );
+
+  const [perspectiveCamera, orthographicCamera] = React.useMemo(() => {
+    const perspectiveCamera = App.CreatePerspectiveCamera();
+    perspectiveCamera.position.z = 6;
+    const orthographicCamera = App.CreateOrthographicCamera();
+    orthographicCamera.position.z = 6;
+    return [perspectiveCamera, orthographicCamera];
+  }, []);
+
+  const onRender = React.useCallback(() => {
+    const ratio = window.innerWidth / window.innerHeight;
+    orthographicCamera.left = -5 * ratio;
+    orthographicCamera.right = 5 * ratio;
+    orthographicCamera.top = 5;
+    orthographicCamera.bottom = -5;
+    orthographicCamera.updateProjectionMatrix();
+  }, [orthographicCamera]);
+
   const {
-    element,
+    scene,
     rotateUp,
     rotateDown,
     rotateLeft,
     rotateRight,
   } = React.useMemo(makeScene, []);
+
+  useRender(
+    renderer,
+    scene,
+    isPerspectiveCamera ? perspectiveCamera : orthographicCamera,
+    onRender,
+  );
 
   const [upMouseDown, upMouseUp] = useRotationFunction(rotateUp);
   const [downMouseDown, downMouseUp] = useRotationFunction(rotateDown);
@@ -128,6 +198,19 @@ export const Page = () => {
       <div
         style={{ minWidth: "100%", minHeight: "100%", position: "absolute" }}
       >
+        <button
+          className={emo.button(isPerspectiveCamera)}
+          onClick={setPerspective}
+          style={{ marginRight: 5 }}
+        >
+          Perspective
+        </button>
+        <button
+          className={emo.button(!isPerspectiveCamera)}
+          onClick={setOrthographic}
+        >
+          Orthographic
+        </button>
         <div
           style={{
             display: "grid",
@@ -136,6 +219,13 @@ export const Page = () => {
             width: "min-content",
           }}
         >
+          <i
+            className={`fas fa-globe ${emo.icon()}`}
+            style={{
+              gridColumnStart: 2,
+              gridRowStart: 2,
+            }}
+          />
           <i
             className={`fas fa-caret-up ${emo.arrow()}`}
             style={{
@@ -178,7 +268,7 @@ export const Page = () => {
           />
         </div>
       </div>
-      <CanvasHost>{element}</CanvasHost>;
+      <CanvasHost>{renderer.domElement}</CanvasHost>;
     </div>
   );
 };

@@ -6,7 +6,6 @@
       "setl": ["./ts"]
     },
     "rootDir": "./ts",
-    "declarationDir": "./target/ts",
     "outDir": "./target/ts",
     "tsBuildInfoFile": "./target/ts/tsconfig.tsbuildinfo"
   },

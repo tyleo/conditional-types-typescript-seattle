@@ -5,17 +5,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Website: Compile & Launch",
+      "name": "App",
       "type": "chrome",
       "request": "launch",
-      "url": "http://127.0.0.1:5500",
+      "url": "localhost:8080/index.html",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
-        "webpack:///./ts/*": "${workspaceFolder}/packages/App/ts/*",
-        "webpack:///../*": "${workspaceFolder}/packages/*"
-      },
-      "preLaunchTask": "npm: build:dev - packages/App"
-      //"trace": "verbose"
+        "webpack:///*": "${workspaceFolder}/packages/App/*"
+      }
     }
   ]
 }

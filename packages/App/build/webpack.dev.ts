@@ -4,9 +4,9 @@ import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as Webpack from "webpack";
 
 // From target/ts/commonjs/_Build
-const basePath = Path.resolve(__dirname, "../../../..");
+const basePath = Path.resolve(__dirname, "../..");
 const baseRelative = (path: string) => Path.resolve(basePath, path);
-const srcPath = Path.resolve(basePath, "target/ts/commonjs");
+const srcPath = Path.resolve(basePath, "target/ts");
 const srcRelative = (path: string) => Path.resolve(srcPath, path);
 
 const config: Webpack.Configuration = {
