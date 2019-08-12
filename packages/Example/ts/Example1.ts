@@ -186,17 +186,40 @@ interface IEntity {
 interface ISystem<TComponents extends any[]> {
   preGameUpdate?(): void;
   preSystemUpdate?(): void;
-  systemUpdate?(...components: TComponents): void;
+  systemUpdate?(): void;
   postSystemUpdate?(): void;
   postGameUpdate?(): void;
 }
 
-interface IGame {
-  readonly components: IComponent[][];
-  readonly componentDesc: IComponentDesc;
+const components = <T extends any[]>(size: T["length"]): T => {
+  const result = [];
+  for (let i = 0; i < size; ++i) result.push(undefined);
+  return result as T;
+};
+
+interface IGame<TComponents extends any[]> {
+  readonly entities: {
+    readonly id: number;
+    readonly components: number[][];
+  }[];
+  readonly components: {
+    readonly [k in keyof TComponents]: TComponents[k][];
+  };
 
   update(): void;
 }
+
+const IGame = {
+  new: <TComponents extends any[]>(
+    components: TComponents,
+  ): IGame<TComponents> =>
+    (({
+      entities: [],
+      components: components.map(() => []),
+    } as unknown) as IGame<TComponents>),
+} as const;
+
+const z = IGame.new(components<[{ fire: string }, {}]>(2));
 
 //
 
@@ -224,7 +247,8 @@ interface IMountPoint<TPart extends Part> {
 
 type MountPoints<T> = { [k in keyof T]: IMountPoint<Part> };
 
-export interface ISpaceShip<TMountPoints = any> extends ITyped<"ISpaceShip"> {
+export interface ISpaceShipTemplate<TMountPoints = any>
+  extends ITyped<"ISpaceShip"> {
   readonly mountPoints: MountPoints<TMountPoints>;
 }
 
@@ -236,7 +260,7 @@ export interface IWeakGun extends IGun {
   readonly ["@guntype"]: "IWeakGun";
 }
 
-interface ITestShip extends ISpaceShip {
+interface ITestShip extends ISpaceShipTemplate {
   readonly mountPoints: {
     readonly frontLeftGun: IMountPoint<ISavageGun>;
     readonly frontRightGun: IMountPoint<IGun>;
@@ -245,7 +269,7 @@ interface ITestShip extends ISpaceShip {
 }
 
 const mountPart = <
-  TShip extends ISpaceShip,
+  TShip extends ISpaceShipTemplate,
   TMountPoint extends keyof TMountPoints,
   TPart extends PartTypeFromMountPoint<TMountPoints[TMountPoint]>,
   TMountPoints extends TShip["mountPoints"] = TShip["mountPoints"]
@@ -261,7 +285,7 @@ const mountPart = <
   };
 } => fabricate();
 
-interface IPartMounter<TShip extends ISpaceShip> {
+interface IPartMounter<TShip extends ISpaceShipTemplate> {
   mount<
     TMountPoint extends keyof TMountPoints,
     TPart extends PartTypeFromMountPoint<TMountPoints[TMountPoint]>,
@@ -281,7 +305,7 @@ interface IPartMounter<TShip extends ISpaceShip> {
   toShip(): TShip;
 }
 
-const partMounter = <TShip extends ISpaceShip>(
+const partMounter = <TShip extends ISpaceShipTemplate>(
   self: TShip,
 ): IPartMounter<TShip> => fabricate();
 
@@ -290,8 +314,21 @@ const savageGun = fabricate<ISavageGun>();
 const weakGun = fabricate<IWeakGun>();
 const thruster = fabricate<IThruster>();
 
-partMounter(ship)
+const result = partMounter(ship)
   .mount("frontLeftGun", weakGun)
   .mount("frontRightGun", savageGun)
   .mount("rearThruster", thruster)
   .toShip();
+
+// Type List
+
+export type First<T extends any[]> = T[0];
+export type Rest<T extends any[]> = ((...args: T) => void) extends ((
+  first: any,
+  ...rest: infer TRest
+) => void)
+  ? [] extends TRest
+    ? never
+    : TRest
+  : never;
+type Z = First<[]>;
