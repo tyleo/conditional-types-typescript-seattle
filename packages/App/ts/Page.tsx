@@ -21,6 +21,12 @@ const makeScene = () => {
   //root.add(App.CreateGrid(10, 10, 10));
 
   App.LoadObj("ship_00").then(loaded => {
+    if (App.LoadObjError.check(loaded)) {
+      // eslint-disable-next-line no-console
+      console.log(`Error from LoadObj: Error loading ${loaded.fileName}.`);
+      return;
+    }
+
     const size = new Three.Box3()
       .setFromObject(loaded)
       .getSize(new Three.Vector3());

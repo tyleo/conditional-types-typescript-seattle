@@ -1,5 +1,8 @@
 import "./Asset";
+export * from "./Error";
 
+export * from "./Render/AsyncMtlLoader";
+export * from "./Render/AsyncObjLoader";
 export * from "./Render/CreateOrthographicCamera";
 export * from "./Render/CreatePerspectiveCamera";
 export * from "./Render/CreateCube";
