@@ -2,12 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "setl": ["./ts"]
-    },
     "rootDir": "./ts",
     "outDir": "./target/ts",
     "tsBuildInfoFile": "./target/ts/tsconfig.tsbuildinfo"
   },
-  "include": ["./ts/**/*.ts", "./ts/**/*.tsx"]
+  "include": ["./ts/**/*.ts", "./ts/**/*.tsx"],
+  "references": [
+    {
+      "path": "../Error"
+    }
+  ]
 }

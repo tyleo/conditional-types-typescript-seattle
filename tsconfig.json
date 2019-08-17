@@ -3,6 +3,12 @@
   "references": [
     {
       "path": "packages/App"
+    },
+    {
+      "path": "packages/Error"
+    },
+    {
+      "path": "packages/Example"
     }
   ]
 }

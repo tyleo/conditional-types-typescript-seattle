@@ -1,5 +1,4 @@
 import "./Asset";
-export * from "./Error";
 
 export * from "./Render/AsyncMtlLoader";
 export * from "./Render/AsyncObjLoader";

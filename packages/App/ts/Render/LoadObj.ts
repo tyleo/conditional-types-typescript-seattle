@@ -1,14 +1,14 @@
+import { Error } from "Error";
 import * as MtlLoader from "three/examples/jsm/loaders/MTLLoader";
 import * as Three from "three";
 
 import * as App from "App";
 
-export const LoadObjError = App.Error.new("LoadObjError", {
+export const LoadObjError = Error.new("LoadObjError", {
   MtlLoadError: (fileName: string) => ({ fileName }),
-
   ObjLoadError: (fileName: string) => ({ fileName }),
 });
-export type LoadObjError = App.Error<typeof LoadObjError>;
+export type LoadObjError = Error<typeof LoadObjError>;
 
 export const LoadObj = async (
   fileWithoutExt: string,

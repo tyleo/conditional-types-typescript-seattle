@@ -1,9 +1,10 @@
 {
-  "name": "Example",
-  "description": "Example",
+  "name": "Error",
+  "description": "Error",
   "version": "1.0.0",
   "author": "Tyler Wolf Leonhardt",
   "private": true,
+  "main": "./target/ts/index.js",
   "types": "./target/ts/index.d.ts",
   "devDependencies": {
     "Base_": "1.0.0"

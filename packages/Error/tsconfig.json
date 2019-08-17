@@ -2,18 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "App": ["./ts"],
-      "Asset/*": ["../asset/*"]
-    },
     "rootDir": "./ts",
     "outDir": "./target/ts",
     "tsBuildInfoFile": "./target/ts/tsconfig.tsbuildinfo"
   },
-  "include": ["./ts/**/*.ts", "./ts/**/*.tsx"],
-  "references": [
-    {
-      "path": "../Error"
-    }
-  ]
+  "include": ["./ts/**/*.ts", "./ts/**/*.tsx"]
 }
