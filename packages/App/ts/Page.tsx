@@ -221,8 +221,13 @@ export const Page = () => {
         style={{ minWidth: "100%", minHeight: "100%", position: "absolute" }}
       >
         <select style={{ margin: 5 }} onChange={selectModel}>
+          <option value="cube">cube</option>
+          <option value="dark_knight">dark_knight</option>
           <option value="frog">frog</option>
+          <option value="light_knight">light_knight</option>
+          <option value="scribble">scribble</option>
           <option value="ship_00">ship_00</option>
+          <option value="zirca">zirca</option>
         </select>
         <div>
           <button
