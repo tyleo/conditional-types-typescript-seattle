@@ -20,20 +20,29 @@ const makeScene = () => {
   scene.add(root);
   //root.add(App.CreateGrid(10, 10, 10));
 
-  App.LoadObj("ship_00").then(loaded => {
-    if (App.LoadObjErr.check(loaded)) {
-      // eslint-disable-next-line no-console
-      alert(`Err from LoadObj: Err loading ${loaded.fileName}.`);
-      return;
-    }
+  let lastLoaded: Three.Group | undefined;
+  const loadObj = (obj: string) => {
+    App.LoadObj(obj).then(loaded => {
+      if (App.LoadObjErr.check(loaded)) {
+        // eslint-disable-next-line no-console
+        alert(`Err from LoadObj: Err loading ${loaded.fileName}.`);
+        return;
+      }
 
-    const size = new Three.Box3()
-      .setFromObject(loaded)
-      .getSize(new Three.Vector3());
-    loaded.position.set(0 - size.x / 2, -2 - size.y / 2, size.z / 2);
+      if (lastLoaded !== undefined) {
+        root.remove(lastLoaded);
+      }
+      lastLoaded = loaded;
 
-    root.add(loaded);
-  });
+      const size = new Three.Box3()
+        .setFromObject(loaded)
+        .getSize(new Three.Vector3());
+      loaded.position.set(0 - size.x / 2, -2 - size.y / 2, size.z / 2);
+
+      root.add(loaded);
+    });
+  };
+  loadObj("frog");
 
   const rotationAmount = (3.14 * 2) / 3 / 60;
   const rotateUp = () => {
@@ -62,6 +71,7 @@ const makeScene = () => {
     rotateDown,
     rotateLeft,
     rotateRight,
+    loadObj,
   };
 };
 
@@ -185,7 +195,13 @@ export const Page = () => {
     rotateDown,
     rotateLeft,
     rotateRight,
+    loadObj,
   } = React.useMemo(makeScene, []);
+
+  const selectModel = React.useCallback(
+    (e: React.FormEvent<HTMLSelectElement>) => loadObj(e.currentTarget.value),
+    [loadObj],
+  );
 
   useRender(
     renderer,
@@ -204,19 +220,25 @@ export const Page = () => {
       <div
         style={{ minWidth: "100%", minHeight: "100%", position: "absolute" }}
       >
-        <button
-          className={emo.button(isPerspectiveCamera)}
-          onClick={setPerspective}
-          style={{ marginRight: 5 }}
-        >
-          Perspective
-        </button>
-        <button
-          className={emo.button(!isPerspectiveCamera)}
-          onClick={setOrthographic}
-        >
-          Orthographic
-        </button>
+        <select style={{ margin: 5 }} onChange={selectModel}>
+          <option value="frog">frog</option>
+          <option value="ship_00">ship_00</option>
+        </select>
+        <div>
+          <button
+            className={emo.button(isPerspectiveCamera)}
+            onClick={setPerspective}
+            style={{ marginRight: 5 }}
+          >
+            Perspective
+          </button>
+          <button
+            className={emo.button(!isPerspectiveCamera)}
+            onClick={setOrthographic}
+          >
+            Orthographic
+          </button>
+        </div>
         <div
           style={{
             display: "grid",
