@@ -1,18 +1,18 @@
-import { Error } from "Error";
+import { Err } from "Err";
 import * as MtlLoader from "three/examples/jsm/loaders/MTLLoader";
 import * as Three from "three";
 
 import * as App from "App";
 
-export const LoadObjError = Error.new("LoadObjError", {
-  MtlLoadError: (fileName: string) => ({ fileName }),
-  ObjLoadError: (fileName: string) => ({ fileName }),
+export const LoadObjErr = Err.new("LoadObjErr", {
+  MtlLoadErr: (fileName: string) => ({ fileName }),
+  ObjLoadErr: (fileName: string) => ({ fileName }),
 });
-export type LoadObjError = Error<typeof LoadObjError>;
+export type LoadObjErr = Err<typeof LoadObjErr>;
 
 export const LoadObj = async (
   fileWithoutExt: string,
-): Promise<Three.Group | LoadObjError> => {
+): Promise<Three.Group | LoadObjErr> => {
   let mtlCreator: MtlLoader.MaterialCreator;
   try {
     const mtlLoader = new App.AsyncMtlLoader();
@@ -20,7 +20,7 @@ export const LoadObj = async (
     mtlCreator = await mtlLoader.load(`${fileWithoutExt}.mtl`);
     mtlCreator.preload();
   } catch {
-    return LoadObjError.MtlLoadError(`asset/obj/${fileWithoutExt}.mtl`);
+    return LoadObjErr.MtlLoadErr(`asset/obj/${fileWithoutExt}.mtl`);
   }
 
   try {
@@ -29,6 +29,6 @@ export const LoadObj = async (
     objLoader.wrapped.setPath("asset/obj/");
     return await objLoader.load(`${fileWithoutExt}.obj`);
   } catch {
-    return LoadObjError.ObjLoadError(`asset/obj/${fileWithoutExt}.obj`);
+    return LoadObjErr.ObjLoadErr(`asset/obj/${fileWithoutExt}.obj`);
   }
 };

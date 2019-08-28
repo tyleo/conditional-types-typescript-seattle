@@ -5,7 +5,7 @@
       "path": "packages/App"
     },
     {
-      "path": "packages/Error"
+      "path": "packages/Err"
     },
     {
       "path": "packages/Example"

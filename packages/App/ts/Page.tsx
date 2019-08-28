@@ -21,9 +21,9 @@ const makeScene = () => {
   //root.add(App.CreateGrid(10, 10, 10));
 
   App.LoadObj("ship_00").then(loaded => {
-    if (App.LoadObjError.check(loaded)) {
+    if (App.LoadObjErr.check(loaded)) {
       // eslint-disable-next-line no-console
-      console.log(`Error from LoadObj: Error loading ${loaded.fileName}.`);
+      alert(`Err from LoadObj: Err loading ${loaded.fileName}.`);
       return;
     }
 

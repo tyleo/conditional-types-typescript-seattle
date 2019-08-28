@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "emotion": "^10.0.14",
+    "Err": "1.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "three": "^0.107.0"
@@ -27,7 +28,7 @@
     "clean:node_modules": "rimraf node_modules",
     "clean:target": "rimraf target",
     "lint": "eslint ts/**",
-    "serve:static:dev": "http-server target/webpack/dev",
+    "serve:dev": "http-server target/webpack/dev",
     "watch": "ttsc -b --w"
   }
 }

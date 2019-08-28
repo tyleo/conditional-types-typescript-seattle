@@ -1,3 +1,4 @@
+import { Err } from "Err";
 /// 1
 
 // type HelloConditional = "Hello World" extends string ? number : string;
@@ -60,3 +61,53 @@
 //   ? R
 //   : any;
 // const returnType: ReturnType<(a: number) => string> = "Hello";
+
+/// 6
+
+export const LoadErr = Err.new("LoadErr", {
+  FileLoadErr: (fileName: string) => ({ fileName }),
+
+  NotEnoughMemoryErr: (objectSize: number) => ({ objectSize }),
+});
+
+export type LoadErr = Err<typeof LoadErr>;
+
+// Usage
+const load = (): string | LoadErr => LoadErr.FileLoadErr("file.txt");
+
+const res = load();
+const isErr = LoadErr.check(res) && res.errSubtype === "FileLoadErr";
+if (isErr) {
+  /* Error */
+}
+
+/// 7
+
+// interface IFileLoadErr {
+//   readonly fileName: string;
+// }
+
+// type FileLoadErr = IFileLoadErr & IErr<"LoadErr", "FileLoadErr">;
+
+export interface IErr<
+  TType extends number | symbol | string,
+  TSubType extends number | symbol | string = string
+> {
+  readonly errType: TType;
+  readonly errSubtype: TSubType;
+}
+
+interface IErrInput {
+  readonly [k: string]: (...args: any) => any;
+}
+
+type ErrOutput<TType extends string, TErrInput extends IErrInput> = {
+  readonly [k in keyof TErrInput]: (
+    ...args: Parameters<TErrInput[k]>
+  ) => ReturnType<TErrInput[k]> & IErr<TType, k>;
+};
+
+declare const newFn: <TType extends string, TErrInput extends IErrInput>(
+  type: TType,
+  errors: TErrInput,
+) => ErrOutput<TType, TErrInput>;

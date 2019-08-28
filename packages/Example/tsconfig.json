@@ -9,7 +9,7 @@
   "include": ["./ts/**/*.ts", "./ts/**/*.tsx"],
   "references": [
     {
-      "path": "../Error"
+      "path": "../Err"
     }
   ]
 }
